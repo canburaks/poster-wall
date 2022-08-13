@@ -4,6 +4,10 @@ import { createUseGesture, dragAction, pinchAction } from "@use-gesture/react"
 import { MantineProvider } from "@mantine/core"
 import { styled, css } from "../theme/stitches.config"
 import { AspectRatio } from "../theme"
+import { VariantSelect } from "./variant-select"
+import { Toolbar } from "./toolbar"
+
+import { useStore } from "../lib/state"
 
 const useGesture = createUseGesture([dragAction, pinchAction])
 
@@ -14,13 +18,15 @@ const PosterContainer = styled("div", {
 const PosterBox = styled(AspectRatio, {
     width: "auto",
     height: "auto",
-    position: "relative"
+    position: "relative",
+    overflowY: "visible"
 })
 const AnimatedPoster = animated(PosterBox)
 
-export function Poster({ src, width, height, ratio }) {
+export function Poster({ src, width, height, ratio, poster }) {
+    const changePosterSize = useStore((state) => state.changePosterSize)
     useEffect(() => {
-        const handler = e => e.preventDefault()
+        const handler = (e) => e.preventDefault()
         document.addEventListener("gesturestart", handler)
         document.addEventListener("gesturechange", handler)
         document.addEventListener("gestureend", handler)
@@ -46,8 +52,8 @@ export function Poster({ src, width, height, ratio }) {
             onDrag: ({ pinching, cancel, offset: [x, y], ...rest }) => {
                 if (pinching) return cancel()
                 api.start({ x, y })
-            },
-            onPinch: ({
+            }
+            /*onPinch: ({
                 origin: [ox, oy],
                 first,
                 movement: [ms],
@@ -70,7 +76,7 @@ export function Poster({ src, width, height, ratio }) {
                 const y = memo[1] - (ms - 1) * memo[3]
                 api.start({ scale: s, rotateZ: a, x, y })
                 return memo
-            }
+            }*/
         },
         {
             target: ref,
@@ -79,16 +85,43 @@ export function Poster({ src, width, height, ratio }) {
         }
     )
     const boxStyle = {
-        background: `url(${src})`,
-        backgroundSize: "cover",
-        width,
+        //background: `url(${src})`,
+        //backgroundSize: "cover",
+        width: width,
+        maxWidth: width,
+        minHeight: height,
         height,
+        position: "relative",
+        zIndex: 1
+    }
+    const imageboxStyle = {
+        zIndex: -1,
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundImage: `url(${src})`,
+        backgroundSize: "cover"
+    }
+    const imageStyle = {
+        height,
+        maxWidth: "100%",
+        top: 0,
+        left: 0,
+        width: "100%",
+        zIndex: -1,
         position: "relative"
     }
 
     return (
         <animated.div className={"card"} ref={ref} style={style}>
-            <PosterBox ratio={ratio} id="poster-box" css={boxStyle} />
+            <PosterBox ratio={ratio} id="poster-box" css={boxStyle}></PosterBox>
+            <div id="imagebox" style={imageboxStyle}></div>
+            <Toolbar poster={poster} changeHandler={changePosterSize} />
         </animated.div>
     )
 }

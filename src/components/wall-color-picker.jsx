@@ -15,8 +15,8 @@ const Box = styled("div", {
 })
 
 export const WallColorPicker = () => {
-    const canvasColor = useStore(state => state.wallColor)
-    const canvasColorChanger = useStore(state => state.changeWallColor)
+    const canvasColor = useStore((state) => state.wallColor)
+    const canvasColorChanger = useStore((state) => state.changeWallColor)
     return (
         <ColorInput
             defaultValue={canvasColor}
@@ -31,11 +31,11 @@ export const WallColorPicker = () => {
                 wrapper: {
                     background: "transparent"
                 },
-                root:{
+                root: {
                     background: "transparent"
                 }
             }}
-            sx={theme => ({
+            sx={(theme) => ({
                 position: "absolute",
                 top: 32,
                 right: "5vw",

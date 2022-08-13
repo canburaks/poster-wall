@@ -11,16 +11,16 @@ const MARKS = [
 ]
 
 export function WallWidthSlider() {
-    const width = useStore(state => state.width)
-    const increaseWallWidth = useStore(state => state.changeWidth)
+    const width = useStore((state) => state.width)
+    const increaseWallWidth = useStore((state) => state.changeWidth)
     const changeHandler = (value) => {
-        const matchedMark = MARKS.filter(m => m.value === value)[0]
+        const matchedMark = MARKS.filter((m) => m.value === value)[0]
         console.log("value", value, matchedMark.cm)
         increaseWallWidth(matchedMark.cm)
     }
     return (
         <Slider
-            label={val => MARKS.find(mark => mark.value === val).label}
+            label={(val) => MARKS.find((mark) => mark.value === val).label}
             defaultValue={60}
             step={20}
             marks={MARKS}

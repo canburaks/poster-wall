@@ -1,6 +1,6 @@
 import React, { useEffect } from "react"
 import { MantineProvider } from "@mantine/core"
-import { theme } from "./theme"
+import { theme } from "../theme"
 import { MyApp } from "./app"
 import { useViewportSize } from "@mantine/hooks"
 
@@ -14,10 +14,11 @@ export default function ThemeWrapper() {
     return <MyApp />
 }
 
-const Warning = () =>
+const Warning = () => (
     <div className="warning">
         <h2>
             Bu uygulama mobil cihazlar için optimize edilmemiştir. Lütfen bir
             bilgisayarda deneyiniz
         </h2>
     </div>
+)
